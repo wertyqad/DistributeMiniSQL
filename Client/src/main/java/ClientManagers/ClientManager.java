@@ -70,6 +70,10 @@ public class ClientManager {
             }
 
             String table = target.get("name");
+			if(table.contains(";")){
+				//检查表名问题
+				table=table.replace(";","");
+			}
             String cache = null;
             System.out.println("新消息>>>需要处理的表名是：" + table);
 
