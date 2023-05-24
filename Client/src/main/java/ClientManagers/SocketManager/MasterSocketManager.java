@@ -21,7 +21,7 @@ public class MasterSocketManager {
     private ClientManager clientManager;
 
     // 服务器的IP和端口号
-    private final String master = "127.0.0.1";
+    private final String master = "192.168.43.125";
     private final int PORT = 12345;
 
     // 使用map来存储需要处理的表名-sql语句的对应关系
@@ -86,7 +86,7 @@ public class MasterSocketManager {
 					this.clientManager.cacheManager.setCache(table, ip);
 					System.out.println("table与ip已写入缓存");
 				}catch(Exception e){
-					if(ip=="null")//配置时ip分配出了点问题
+					if(ip.equals("null"))//配置时ip分配出了点问题
 						System.out.println("服务器IP分配出现错误");
 					else{
 						e.printStackTrace();

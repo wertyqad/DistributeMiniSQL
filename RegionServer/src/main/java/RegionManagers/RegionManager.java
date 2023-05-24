@@ -14,7 +14,7 @@ public class RegionManager {
     private MasterSocketManager masterSocketManager;
     private zkServiceManager zkServiceManager;
 
-    private final int PORT = 22224;
+    private final int PORT = 22222;
 
     public RegionManager() throws IOException, InterruptedException {
         dataBaseManager = new DataBaseManager();
@@ -40,5 +40,7 @@ public class RegionManager {
         MasterSocketThread.start();
 
         System.out.println("从节点开始运行！");
+
+		
     }
 }

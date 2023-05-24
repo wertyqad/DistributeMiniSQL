@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * 客户端socket线程，负责和客户端进行通信
@@ -39,7 +40,7 @@ public class ClientThread implements Runnable  {
 
     @Override
     public void run() {
-        System.out.println("服务器监听客户端消息中" + socket.getInetAddress() + socket.getPort());
+        System.out.println("服务器监听客户端消息中" + socket.getInetAddress() +" 端口:" +socket.getPort());
         String line;
         try {
             while (isRunning) {
@@ -52,10 +53,19 @@ public class ClientThread implements Runnable  {
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        } catch (SocketException se) {
+			System.out.println("Socket关闭，客户端连接结束");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+    
 
     public void sendToClient(String info) {
         output.println("<result>" + info);
@@ -97,8 +107,10 @@ public class ClientThread implements Runnable  {
     }
 
     public void sendToFTP(String fileName) {
-        ftpUtils.uploadFile(fileName, "table");
-        ftpUtils.uploadFile(fileName + "_index.index", "index");
+        if(!ftpUtils.uploadFile(fileName, "/table"))
+			System.out.println(fileName+"(table)文件上传失败");
+        if(!ftpUtils.uploadFile(fileName + "_index.index", "/index"))
+			System.out.println(fileName+"(index)文件上传失败");
     }
 
     public void deleteFromFTP(String fileName) {
@@ -107,7 +119,9 @@ public class ClientThread implements Runnable  {
     }
 
     public void sendTCToFTP() {
-        ftpUtils.uploadFile("table_catalog", SocketUtils.getHostAddress(), "catalog");
-        ftpUtils.uploadFile("index_catalog", SocketUtils.getHostAddress(), "catalog");
+        if(!ftpUtils.uploadFile("table_catalog", SocketUtils.getHostAddress(), "/catalog"))
+			System.out.println("table_catalog文件上传失败(inSendTCToFTP)");
+        if(!ftpUtils.uploadFile("index_catalog", SocketUtils.getHostAddress(), "/catalog"))
+			System.out.println("table_catalog文件上传失败(inSendTCToFTP)");
     }
 }

@@ -45,4 +45,39 @@
 
     </dependencies>
 
+<!-- build
+	构建流程，使用mvn clean package打包后，target下会存在两个jar文件，我们需要执行具备独立依赖的jar包，即执行：
+	java -jar target/MasterServer-1.0-SNAPSHOT-jar-with-dependencies.jar
+-->
+
+
+<build>
+  <plugins>
+    <!-- ... -->
+    <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <version>3.3.0</version>
+      <configuration>
+        <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+        <archive>
+          <manifest>
+            <mainClass>MasterServer</mainClass>
+          </manifest>
+        </archive>
+      </configuration>
+      <executions>
+        <execution>
+          <id>make-assembly</id>
+          <phase>package</phase>
+          <goals>
+            <goal>single</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+    <!-- ... -->
+  </plugins>
+</build>
 </project>

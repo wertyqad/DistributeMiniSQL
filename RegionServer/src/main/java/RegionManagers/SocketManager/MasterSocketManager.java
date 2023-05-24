@@ -19,7 +19,7 @@ public class MasterSocketManager implements Runnable {
     private boolean isRunning = false;
 
     public final int SERVER_PORT = 12345;
-    public final String MASTER = "localhost";
+    public final String MASTER = "192.168.43.125";
 
     public MasterSocketManager() throws IOException {
         this.socket = new Socket(MASTER, SERVER_PORT);
@@ -28,6 +28,10 @@ public class MasterSocketManager implements Runnable {
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new PrintWriter(socket.getOutputStream(), true);
         isRunning = true;
+
+		//FTP登录测试
+		if(!ftpUtils.login_test())
+			System.out.println("测试环节>>>FTP连接测试失败,请检查IP和端口是否正确");
     }
 
     public void sendToMaster(String modified_info) {
